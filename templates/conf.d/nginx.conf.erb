@@ -1,4 +1,7 @@
-# MANAGED BY PUPPET
+#
+## MANAGED BY PUPPET
+#
+
 <% if @daemon -%>
 daemon <%= @daemon %>;
 <% end -%>
@@ -9,6 +12,7 @@ worker_processes <%= @worker_processes %>;
 <% if @worker_rlimit_nofile -%>
 worker_rlimit_nofile <%= @worker_rlimit_nofile %>;
 <% end -%>
+pcre_jit on;
 
 <% if @pid -%>
 pid        <%= @pid %>;
@@ -28,6 +32,16 @@ error_log  <%= @nginx_error_log %> <%= @nginx_error_log_severity %>;
 <%= sprintf("%-*s", field_width, key) %> <%= asubvalue %>;
 <%- end -%>
 <%- end -%>
+<% end -%>
+
+<% if @load_modules -%>
+<% if @load_modules.is_a?(Array) -%>
+  <%- @load_modules.each do |load_module| -%>
+include  <%= load_module %>;
+  <%- end -%>
+<% else -%>
+include  <%= @load_modules %>;
+<% end -%>
 <% end -%>
 
 events {
@@ -53,8 +67,6 @@ http {
   <%- end -%>
   <%- end -%>
 <% end -%>
-  include       <%= @conf_dir %>/mime.types;
-  default_type  application/octet-stream;
 <% if @log_format -%>
 <% @log_format.sort_by{|k,v| k}.each do |key,value| -%>
   log_format <%= key %> '<%= value %>';
@@ -78,16 +90,26 @@ http {
   server_tokens <%= @server_tokens %>;
 
   types_hash_max_size <%= @types_hash_max_size %>;
+<% if @types_hash_bucket_size -%>
   types_hash_bucket_size <%= @types_hash_bucket_size %>;
+<% end -%>
 
   server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
   server_names_hash_max_size <%= @names_hash_max_size %>;
 
   keepalive_timeout   <%= @keepalive_timeout %>;
+<% if @keepalive_requests -%>
   keepalive_requests  <%= @keepalive_requests %>;
+<% end -%>
+<% if @client_body_timeout -%>
   client_body_timeout <%= @client_body_timeout %>;
+<% end -%>
+<% if @send_timeout -%>
   send_timeout        <%= @send_timeout %>;
+<% end -%>
+<% if @lingering_timeout -%>
   lingering_timeout   <%= @lingering_timeout %>;
+<% end -%>
   tcp_nodelay         <%= @http_tcp_nodelay %>;
 
 <% if @gzip == 'on' -%>
@@ -181,9 +203,20 @@ http {
   <%- end -%>
 <% end -%>
 
-  include <%= @conf_dir %>/conf.d/*.conf;
+<% if @load_rules.is_a?(Array) -%>
+  <%- @load_rules.each do |load_rule| -%>
+  include       <%= @conf_dir %>/<%= load_rule %>;
+  <%- end -%>
+<% else -%>
+  include       <%= @conf_dir %>/<%= @load_rules %>;
+<% end -%>
+
+  include       <%= @conf_dir %>/mime.types;
+  default_type  application/octet-stream;
+
+  include       <%= @conf_dir %>/conf.d/*.conf;
 <% unless @confd_only -%>
-  include <%= @conf_dir %>/sites-enabled/*;
+  include       <%= @conf_dir %>/sites-enabled/*.conf;
 <% end -%>
 }
 <% if @mail -%>

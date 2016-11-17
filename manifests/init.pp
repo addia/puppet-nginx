@@ -61,9 +61,9 @@ class nginx (
   ### START Nginx Configuration ###
   $accept_mutex                   = 'on',
   $accept_mutex_delay             = '500ms',
-  $client_body_buffer_size        = '128k',
-  $client_max_body_size           = '10m',
-  $client_body_timeout            = '60',
+  $client_body_buffer_size        = undef,
+  $client_max_body_size           = undef,
+  $client_body_timeout            = undef,
   $send_timeout                   = '60',
   $lingering_timeout              = '5',
   $events_use                     = false,
@@ -89,6 +89,8 @@ class nginx (
   $http_tcp_nopush                = 'off',
   $keepalive_timeout              = '65',
   $keepalive_requests             = '100',
+  $load_modules                   = {},
+  $load_rules                     = {},
   $log_format                     = {},
   $mail                           = false,
   $stream                         = false,
@@ -96,26 +98,21 @@ class nginx (
   $names_hash_bucket_size         = '64',
   $names_hash_max_size            = '512',
   $nginx_cfg_prepend              = false,
-  $proxy_buffers                  = '32 4k',
-  $proxy_buffer_size              = '8k',
-  $proxy_cache_inactive           = '20m',
-  $proxy_cache_keys_zone          = 'd2:100m',
-  $proxy_cache_levels             = '1',
-  $proxy_cache_max_size           = '500m',
+  $proxy_buffers                  = undef,
+  $proxy_buffer_size              = undef,
+  $proxy_cache_inactive           = undef,
+  $proxy_cache_keys_zone          = undef,
+  $proxy_cache_levels             = undef,
+  $proxy_cache_max_size           = undef,
   $proxy_cache_path               = false,
   $proxy_use_temp_path            = false,
-  $proxy_connect_timeout          = '90',
-  $proxy_headers_hash_bucket_size = '64',
+  $proxy_connect_timeout          = undef,
+  $proxy_headers_hash_bucket_size = undef,
   $proxy_http_version             = undef,
-  $proxy_read_timeout             = '90',
+  $proxy_read_timeout             = undef,
   $proxy_redirect                 = undef,
-  $proxy_send_timeout             = '90',
-  $proxy_set_header               = [
-    'Host $host',
-    'X-Real-IP $remote_addr',
-    'X-Forwarded-For $proxy_add_x_forwarded_for',
-    'Proxy ""',
-  ],
+  $proxy_send_timeout             = undef,
+  $proxy_set_header               = [],
   $proxy_hide_header              = [],
   $proxy_pass_header              = [],
   $sendfile                       = 'on',
@@ -191,7 +188,9 @@ class nginx (
       fail('proxy_cache_path must be a string or a hash')
     }
   }
-  validate_re($proxy_cache_levels, '^[12](:[12])*$')
+  if ($proxy_cache_levels != undef) {
+    validate_re($proxy_cache_levels, '^[12](:[12])*$')
+  }
   validate_string($proxy_cache_keys_zone)
   validate_string($proxy_cache_max_size)
   validate_string($proxy_cache_inactive)
@@ -217,15 +216,24 @@ class nginx (
   validate_bool($mail)
   validate_bool($stream)
   validate_string($server_tokens)
-  validate_string($client_max_body_size)
+  if ($types_hash_bucket_size != false) {
+    validate_string($types_hash_bucket_size)
+  }
+  if ($client_max_body_size != undef) {
+    validate_string($client_max_body_size)
+  }
   if (!is_integer($names_hash_bucket_size)) {
     fail('$names_hash_bucket_size must be an integer.')
   }
   if (!is_integer($names_hash_max_size)) {
     fail('$names_hash_max_size must be an integer.')
   }
-  validate_string($proxy_buffers)
-  validate_string($proxy_buffer_size)
+  if ($proxy_buffers != false) {
+    validate_string($proxy_buffers)
+  }
+  if ($proxy_buffer_size != false) {
+    validate_string($proxy_buffer_size)
+  }
   if ($http_cfg_prepend != false) {
     if !(is_hash($http_cfg_prepend) or is_array($http_cfg_prepend)) {
       fail('$http_cfg_prepend must be either a hash or array')
@@ -253,7 +261,9 @@ class nginx (
   }
 
   validate_re($nginx_error_log_severity,['debug','info','notice','warn','error','crit','alert','emerg'],'$nginx_error_log_severity must be debug, info, notice, warn, error, crit, alert or emerg')
-  validate_string($proxy_headers_hash_bucket_size)
+  if ($proxy_headers_hash_bucket_size != false) {
+    validate_string($proxy_headers_hash_bucket_size)
+  }
   validate_bool($super_user)
   ### END VALIDATIONS ###
 

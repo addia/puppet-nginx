@@ -1,4 +1,10 @@
-# MANAGED BY PUPPET
+<% if ! @ssl_redirect -%>
+#
+## MANAGED BY PUPPET
+#
+
+<%- end -%>
+
 <% if @rewrite_www_to_non_www -%>
 <%- @server_name.each do |s| -%>
 server {
@@ -29,6 +35,16 @@ server {
 <% end -%>
 <% end -%>
 server {
+<% if @load_module_configs -%>
+<% if @load_module_configs.is_a?(Array) -%>
+  <%- @load_module_configs.each do |load_module_config| -%>
+  include  <%= load_module_config %>;
+  <%- end -%>
+<% else -%>
+  include  <%= @load_module_configs %>;
+<% end -%>
+<% end -%>
+
   <%- if @listen_ip.is_a?(Array) then -%>
     <%- @listen_ip.each do |ip| -%>
   listen       <%= ip %>:<%= @ssl_port %> <% if @ssl_listen_option %>ssl<% end %><% if @http2 == 'on' %> http2<% end %><% if @spdy == 'on' %> spdy<% end %><% if @listen_options %> <%= @listen_options %><% end %>;
@@ -53,7 +69,10 @@ server {
   <%= @maintenance_value %>;
 <% end -%>
 <% if Array(@resolver).count > 0 -%>
-  resolver                  <% Array(@resolver).each do |r| %> <%= r %><% end %>;
+  resolver                 <% Array(@resolver).each do |r| %> <%= r %><% end %>;
+<% end -%>
+<% if @resolver_timeout -%>
+  resolver_timeout          <%= @resolver_timeout -%>;
 <% end -%>
 <%- if instance_variables.any? { |iv| iv.to_s.include? 'auth_basic' } -%>
   <% if defined? @auth_basic -%>
@@ -78,30 +97,29 @@ server {
   gzip_types <%= @gzip_types %>;
 <% end -%>
 <% if @index_files.count > 0 -%>
-  index <% Array(@index_files).each do |i| %> <%= i %><% end %>;
 
 <% end -%>
 <% if @access_log.is_a?(Array) -%>
   <%- @access_log.each do |log_item| -%>
-  access_log            <%= log_item %> <%= @format_log %>;
+  access_log                <%= log_item %> <%= @format_log %>;
   <%- end -%>
 <% elsif @access_log == 'absent' -%>
 <% elsif @access_log == 'off' -%>
   access_log            off;
 <% elsif not @access_log -%>
-  access_log            <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log <%= @format_log %>;
+  access_log                <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.access.log <%= @format_log %>;
 <% else -%>
-  access_log            <%= @access_log %> <%= @format_log %>;
+  access_log                <%= @access_log %> <%= @format_log %>;
 <% end -%>
 <% if @error_log.is_a?(Array) -%>
   <%- @error_log.each do |log_item| -%>
-  error_log             <%= log_item %>;
+  error_log                 <%= log_item %>;
   <%- end -%>
 <% elsif @error_log == 'absent' -%>
 <% elsif not @error_log -%>
-  error_log             <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log;
+  error_log                 <%= scope['::nginx::config::log_dir'] %>/ssl-<%= @name_sanitized %>.error.log;
 <% else -%>
-  error_log             <%= @error_log %>;
+  error_log                 <%= @error_log %>;
 <% end -%>
 <% if @error_pages -%>
 
@@ -109,6 +127,8 @@ server {
   error_page  <%= key %> <%= @error_pages[key] %>;
   <%- end -%>
 <% end -%>
+  index                    <% Array(@index_files).each do |i| %> <%= i %><% end %>;
+
 <% if @vhost_cfg_prepend -%>
 
   <%- @vhost_cfg_prepend.sort_by{ |k, v| k.to_s == 'allow' ? '' : k.to_s }.each do |key,value| -%>
@@ -158,6 +178,6 @@ server {
 <% end -%>
 <% if @add_header -%>
   <%- @add_header.keys.sort.each do |key| -%>
-  add_header              '<%= key %>' '<%= @add_header[key] %>';
+  add_header                <%= key %> '<%= @add_header[key] %>';
   <%- end -%>
 <% end -%>

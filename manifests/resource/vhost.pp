@@ -224,6 +224,7 @@ define nginx::resource::vhost (
   $ssl_protocols                = $::nginx::ssl_protocols,
   $ssl_buffer_size              = undef,
   $ssl_ciphers                  = $::nginx::ssl_ciphers,
+  $ssl_ecdh_curve               = 'secp384r1',
   $ssl_cache                    = 'shared:SSL:10m',
   $ssl_crl                      = undef,
   $ssl_stapling                 = false,
@@ -234,6 +235,7 @@ define nginx::resource::vhost (
   $ssl_session_tickets          = undef,
   $ssl_session_ticket_key       = undef,
   $ssl_trusted_cert             = undef,
+  $load_module_configs          = $::nginx::load_module_configs,
   $spdy                         = $::nginx::spdy,
   $http2                        = $::nginx::http2,
   $proxy                        = undef,
@@ -252,6 +254,7 @@ define nginx::resource::vhost (
   $proxy_set_body               = undef,
   $proxy_buffering              = undef,
   $resolver                     = [],
+  $resolver_timeout             = '5s',
   $fastcgi                      = undef,
   $fastcgi_param                = undef,
   $fastcgi_params               = "${::nginx::conf_dir}/fastcgi_params",
@@ -402,13 +405,21 @@ define nginx::resource::vhost (
   if ($proxy != undef) {
     validate_string($proxy)
   }
-  validate_string($proxy_read_timeout)
+  if ($proxy_read_timeout != undef) {
+    validate_string($proxy_read_timeout)
+  }
   if ($proxy_redirect != undef) {
     validate_string($proxy_redirect)
   }
-  validate_array($proxy_set_header)
-  validate_array($proxy_hide_header)
-  validate_array($proxy_pass_header)
+  if ($proxy_set_header != undef) {
+    validate_array($proxy_set_header)
+  }
+  if ($proxy_hide_header != undef) {
+    validate_array($proxy_hide_header)
+  }
+  if ($proxy_pass_header != undef) {
+    validate_array($proxy_pass_header)
+  }
   if ($proxy_cache != false) {
     validate_string($proxy_cache)
   }

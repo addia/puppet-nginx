@@ -242,11 +242,21 @@ define nginx::resource::location (
   if ($proxy_redirect != undef) {
     validate_string($proxy_redirect)
   }
-  validate_string($proxy_read_timeout)
-  validate_string($proxy_connect_timeout)
-  validate_array($proxy_set_header)
-  validate_array($proxy_hide_header)
-  validate_array($proxy_pass_header)
+  if ($proxy_read_timeout != undef) {
+    validate_string($proxy_read_timeout)
+  }
+  if ($proxy_connect_timeout != undef) {
+    validate_string($proxy_connect_timeout)
+  }
+  if ($proxy_set_header != undef) {
+    validate_array($proxy_set_header)
+  }
+  if ($proxy_hide_header != undef) {
+    validate_array($proxy_hide_header)
+  }
+  if ($proxy_pass_header != undef) {
+    validate_array($proxy_pass_header)
+  }
   if ($fastcgi != undef) {
     validate_string($fastcgi)
   }

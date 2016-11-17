@@ -73,6 +73,8 @@ class nginx::config {
   $http_tcp_nopush                = $::nginx::http_tcp_nopush
   $keepalive_timeout              = $::nginx::keepalive_timeout
   $keepalive_requests             = $::nginx::keepalive_requests
+  $load_modules                   = $::nginx::load_modules
+  $load_rules                     = $::nginx::load_rules
   $log_format                     = $::nginx::log_format
   $mail                           = $::nginx::mail
   $stream                         = $::nginx::stream
@@ -124,8 +126,17 @@ class nginx::config {
     ensure => directory,
   }
 
-  file { "${conf_dir}/conf.stream.d":
-    ensure => directory,
+  if ( $stream != false) {
+    file { "${conf_dir}/conf.stream.d":
+      ensure => directory,
+    }
+    if $confd_purge {
+      File["${conf_dir}/conf.stream.d"] {
+        purge   => true,
+        recurse => true,
+        notify  => Class['::nginx::service'],
+      }
+    }
   }
 
   file { "${conf_dir}/conf.d":
@@ -141,21 +152,18 @@ class nginx::config {
         recurse => true,
         notify  => Class['::nginx::service'],
       }
-      File["${conf_dir}/conf.stream.d"] {
-        purge   => true,
-        recurse => true,
-        notify  => Class['::nginx::service'],
-      }
     }
   }
 
-  file { "${conf_dir}/conf.mail.d":
-    ensure => directory,
-  }
-  if $confd_purge == true {
-    File["${conf_dir}/conf.mail.d"] {
-      purge   => true,
-      recurse => true,
+  if ( $mail != false) {
+    file { "${conf_dir}/conf.mail.d":
+      ensure => directory,
+    }
+    if $confd_purge == true {
+      File["${conf_dir}/conf.mail.d"] {
+        purge   => true,
+        recurse => true,
+      }
     }
   }
 
@@ -170,18 +178,22 @@ class nginx::config {
     group  => $log_group,
   }
 
-  file {$client_body_temp_path:
-    ensure => directory,
-    owner  => $daemon_user,
+  if $client_body_temp_path {
+    file {$client_body_temp_path:
+      ensure => directory,
+      owner  => $daemon_user,
+    }
   }
 
   if ($daemon) {
     validate_re($daemon, '^(on|off)$')
   }
 
-  file {$proxy_temp_path:
-    ensure => directory,
-    owner  => $daemon_user,
+  if $proxy_temp_path {
+    file {$proxy_temp_path:
+      ensure => directory,
+      owner  => $daemon_user,
+    }
   }
 
   unless $confd_only {
@@ -204,20 +216,22 @@ class nginx::config {
         recurse => true,
       }
     }
-    # No real reason not to make these even if $stream is not enabled.
-    file { "${conf_dir}/streams-enabled":
-      ensure => directory,
-      owner  => $sites_available_owner,
-      group  => $sites_available_group,
-      mode   => $sites_available_mode,
-    }
-    file { "${conf_dir}/streams-available":
-      ensure => directory,
-    }
-    if $vhost_purge {
-      File["${conf_dir}/streams-enabled"] {
-        purge   => true,
-        recurse => true,
+    if ( $stream != false) {
+      # No real reason not to make these even if $stream is not enabled.
+      file { "${conf_dir}/streams-enabled":
+        ensure => directory,
+        owner  => $sites_available_owner,
+        group  => $sites_available_group,
+        mode   => $sites_available_mode,
+      }
+      file { "${conf_dir}/streams-available":
+        ensure => directory,
+      }
+      if $vhost_purge {
+        File["${conf_dir}/streams-enabled"] {
+          purge   => true,
+          recurse => true,
+        }
       }
     }
   }

@@ -1,3 +1,4 @@
+<% if ! @ssl_redirect -%>
 <% if @include_files -%>
   <%- @include_files.each do |file| -%>
   include <%= file %>;
@@ -24,9 +25,12 @@
 <% Array(@raw_append).each do |line| -%>
   <%= line %>
 <% end -%>
+<% end -%>
 }
+<% if ! @ssl_redirect -%>
 <% if @passenger_pre_start.is_a?(Array) or @passenger_pre_start.is_a?(String) -%>
   <%- Array(@passenger_pre_start).each do |url| -%>
 passenger_pre_start <%= url %>;
   <%- end -%>
+<% end -%>
 <% end -%>

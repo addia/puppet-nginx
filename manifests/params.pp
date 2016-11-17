@@ -15,9 +15,10 @@ class nginx::params {
   case $::osfamily {
     'ArchLinux': {
       $_module_os_overrides = {
-        'pid'         => false,
-        'daemon_user' => 'http',
-        'log_group'   => 'log',
+        'pid'          => false,
+        'daemon_user'  => 'http',
+        'package_name' => 'nginx-mainline-addons',
+        'log_group'    => 'log',
       }
     }
     'Debian': {
@@ -100,7 +101,7 @@ class nginx::params {
   $temp_dir              = '/tmp'
   $pid                   = $_module_parameters['pid']
 
-  $client_body_temp_path = "${run_dir}/client_body_temp"
+  $client_body_temp_path = undef
   $daemon_user           = $_module_parameters['daemon_user']
   $global_owner          = 'root'
   $global_group          = $_module_parameters['root_group']
@@ -110,7 +111,7 @@ class nginx::params {
   $nginx_error_log_file  = 'error.log'
   $root_group            = $_module_parameters['root_group']
   $package_name          = $_module_parameters['package_name']
-  $proxy_temp_path       = "${run_dir}/proxy_temp"
+  $proxy_temp_path       = undef
   $sites_available_owner = 'root'
   $sites_available_group = $_module_parameters['root_group']
   $sites_available_mode  = '0644'
