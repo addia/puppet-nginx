@@ -60,6 +60,11 @@ class nginx::params {
           'log_group' => 'nginx',
         }
       }
+      if ($::operatingsystemmajrelease in ['7']) {
+        $_module_os_overrides = {
+          'pid'          => false,
+        }
+      }
     }
     'Solaris': {
       $_module_os_overrides = {

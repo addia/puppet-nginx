@@ -88,7 +88,7 @@ class nginx (
   $http_tcp_nodelay               = 'on',
   $http_tcp_nopush                = 'on',
   $keepalive_timeout              = '65',
-  $keepalive_requests             = '100',
+  $keepalive_requests             = undef,
   $load_modules                   = undef,
   $load_rules                     = undef,
   $log_format                     = {},
