@@ -155,11 +155,11 @@ class nginx::config {
     }
   }
 
-  if ( $mail != false) {
+  if ( $mail ) {
     file { "${conf_dir}/conf.mail.d":
       ensure => directory,
     }
-    if $confd_purge == true {
+    if $confd_purge {
       File["${conf_dir}/conf.mail.d"] {
         purge   => true,
         recurse => true,

@@ -16,7 +16,7 @@ class nginx::params {
     'ArchLinux': {
       $_module_os_overrides = {
         'pid'          => false,
-        'daemon_user'  => 'http',
+        'daemon_user'  => 'nginx',
         'package_name' => 'nginx-mainline-addons',
         'log_group'    => 'log',
       }
