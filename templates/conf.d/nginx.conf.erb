@@ -203,12 +203,14 @@ http {
   <%- end -%>
 <% end -%>
 
+<% if @load_rules -%>
 <% if @load_rules.is_a?(Array) -%>
   <%- @load_rules.each do |load_rule| -%>
   include       <%= @conf_dir %>/<%= load_rule %>;
   <%- end -%>
 <% else -%>
   include       <%= @conf_dir %>/<%= @load_rules %>;
+<% end -%>
 <% end -%>
 
   include       <%= @conf_dir %>/mime.types;
