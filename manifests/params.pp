@@ -50,19 +50,22 @@ class nginx::params {
       }
     }
     'RedHat': {
-      if ($::operatingsystem in ['RedHat', 'CentOS'] and $::operatingsystemmajrelease in ['5', '6', '7']) {
+      if ($::operatingsystem in ['RedHat', 'CentOS'] and $::operatingsystemmajrelease in ['7']) {
+        $_module_os_overrides = {
+          'pid'         => false,
+          'manage_repo' => true,
+          'log_group'   => 'nginx',
+        }
+      }
+      elsif ($::operatingsystem in ['RedHat', 'CentOS'] and $::operatingsystemmajrelease in ['5', '6']) {
         $_module_os_overrides = {
           'manage_repo' => true,
           'log_group'   => 'nginx',
         }
-      } else {
+      }
+      else {
         $_module_os_overrides = {
           'log_group' => 'nginx',
-        }
-      }
-      if ($::operatingsystemmajrelease in ['7']) {
-        $_module_os_overrides = {
-          'pid'          => false,
         }
       }
     }
