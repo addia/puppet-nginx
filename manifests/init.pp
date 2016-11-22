@@ -29,7 +29,7 @@ class nginx (
   ### START Nginx Configuration ###
   $client_body_temp_path          = $::nginx::params::client_body_temp_path,
   $confd_only                     = false,
-  $confd_purge                    = false,
+  $confd_purge                    = true,
   $conf_dir                       = $::nginx::params::conf_dir,
   $daemon                         = undef,
   $daemon_user                    = $::nginx::params::daemon_user,
