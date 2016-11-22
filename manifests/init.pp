@@ -123,7 +123,7 @@ class nginx (
   $types_hash_bucket_size         = undef,
   $types_hash_max_size            = '2048',
   $worker_connections             = '1024',
-  $worker_processes               = '1',
+  $worker_processes               = 'auto',
   $worker_rlimit_nofile           = '1024',
   $ssl_protocols                  = 'TLSv1 TLSv1.1 TLSv1.2',
   $ssl_ciphers                    = 'ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS',
@@ -157,8 +157,10 @@ class nginx (
 ) inherits ::nginx::params {
 
   ### Validations ###
-  if ($worker_processes != 'auto') and (!is_integer($worker_processes)) {
-    fail('$worker_processes must be an integer or have value "auto".')
+  if ($worker_processes != '%{processorcount}')  {
+    if ($worker_processes != 'auto') and (!is_integer($worker_processes)) {
+      fail('$worker_processes must be an integer or have value "auto".')
+    }
   }
   if (!is_integer($worker_connections)) {
     fail('$worker_connections must be an integer.')
