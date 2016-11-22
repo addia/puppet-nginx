@@ -157,11 +157,11 @@ class nginx (
 ) inherits ::nginx::params {
 
   ### Validations ###
-  if ($worker_processes != '%{processorcount}')  {
-    if ($worker_processes != 'auto') and (!is_integer($worker_processes)) {
-      fail('$worker_processes must be an integer or have value "auto".')
-    }
-  }
+#  if ($worker_processes != '%{processorcount}')  {
+#    if ($worker_processes != 'auto') and (!is_integer($worker_processes)) {
+#      fail('$worker_processes must be an integer or have value "auto".')
+#    }
+#  }
   if (!is_integer($worker_connections)) {
     fail('$worker_connections must be an integer.')
   }
