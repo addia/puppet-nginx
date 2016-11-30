@@ -31,7 +31,7 @@
 <% if @ssl_crl -%>
   ssl_crl                   <%= @ssl_crl %>;
 <% end -%>
-<%- if instance_variables.any? { |iv| iv.to_s.include? 'ssl_' } -%>
+# <%- if instance_variables.any? { |iv| iv.to_s.include? 'ssl_' } -%>
   <%- if @ssl_stapling -%>
   ssl_stapling              on;
   <%- end -%>
@@ -47,4 +47,4 @@
   <%- if defined? @ssl_trusted_cert -%>
   ssl_trusted_certificate   <%= @ssl_trusted_cert %>;
   <%- end -%>
-<% end -%>
+# <% end -%>

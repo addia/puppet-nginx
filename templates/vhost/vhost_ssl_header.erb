@@ -74,15 +74,15 @@ server {
 <% if @resolver_timeout -%>
   resolver_timeout          <%= @resolver_timeout -%>;
 <% end -%>
-<%- if instance_variables.any? { |iv| iv.to_s.include? 'auth_basic' } -%>
+# <%- if instance_variables.any? { |iv| iv.to_s.include? 'auth_basic' } -%>
   <% if defined? @auth_basic -%>
   auth_basic                "<%= @auth_basic %>";
   <% end -%>
   <% if defined? @auth_basic_user_file -%>
   auth_basic_user_file      <%= @auth_basic_user_file %>;
   <% end -%>
-<%- end -%>
-<%- if instance_variables.any? { |iv| iv.to_s.include? 'client_' } -%>
+# <%- end -%>
+# <%- if instance_variables.any? { |iv| iv.to_s.include? 'client_' } -%>
   <%- if defined? @client_body_timeout -%>
   client_body_timeout <%= @client_body_timeout %>;
   <%- end -%>
@@ -92,7 +92,7 @@ server {
   <%- if defined? @client_max_body_size -%>
   client_max_body_size <%= @client_max_body_size %>;
   <%- end -%>
-<% end -%>
+# <% end -%>
 <% if defined? @gzip_types -%>
   gzip_types <%= @gzip_types %>;
 <% end -%>
