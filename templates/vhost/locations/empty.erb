@@ -1,5 +1,5 @@
 <% if @location_custom_cfg -%>
-  <%- @location_custom_cfg.sort_by {|k,v| k}.each do |key,value| -%>
+  <%- @location_custom_cfg.each do |key,value| -%>
     <%- if value.is_a?(Hash) -%>
       <%- value.sort_by {|k,v| k}.each do |subkey,subvalue| -%>
         <%- Array(subvalue).each do |asubvalue| -%>
