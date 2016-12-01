@@ -161,7 +161,7 @@ server {
   <%= line %>
 <% end -%>
 <% if @root -%>
-  root <%= @root %>;
+  root                  <%= @root %>;
 <% end -%>
 <% Array(@passenger_cgi_param).each do |key,value| -%>
   passenger_set_cgi_param  <%= key %> <%= value %>;

@@ -87,6 +87,7 @@
 #   [*proxy_set_body*]        - If defined, sets the body passed to the backend.
 #   [*proxy_buffering*]       - If defined, sets the proxy_buffering to the passed
 #     value.
+#   [*real_ip_header*]        - If defined, sets the rule proxy_protocol.
 #   [*auth_basic*]            - This directive includes testing name and password
 #     with HTTP Basic Authentication.
 #   [*auth_basic_user_file*]  - This directive sets the htpasswd filename for
@@ -168,6 +169,7 @@ define nginx::resource::location (
   $proxy_set_header     = $::nginx::proxy_set_header,
   $proxy_hide_header    = $::nginx::proxy_hide_header,
   $proxy_pass_header    = $::nginx::proxy_pass_header,
+  $real_ip_header       = $::nginx::real_ip_header,
   $fastcgi              = undef,
   $fastcgi_index        = undef,
   $fastcgi_param        = undef,
@@ -256,6 +258,9 @@ define nginx::resource::location (
   }
   if ($proxy_pass_header != undef) {
     validate_array($proxy_pass_header)
+  }
+  if ($real_ip_header != undef) {
+    validate_array($real_ip_header)
   }
   if ($fastcgi != undef) {
     validate_string($fastcgi)

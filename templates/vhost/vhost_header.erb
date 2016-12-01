@@ -116,7 +116,7 @@ server {
   <%= line %>
 <% end %>
 <% if @root -%>
-  root <%= @root %>;
+  root                  <%= @root %>;
 <% end -%>
 <% if @passenger_cgi_param -%>
   <%- @passenger_cgi_param.keys.sort.each do |key| -%>

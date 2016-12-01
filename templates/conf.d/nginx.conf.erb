@@ -139,6 +139,9 @@ http {
 <% if @client_body_buffer_size -%>
   client_body_buffer_size <%= @client_body_buffer_size %>;
 <% end -%>
+<% if @real_ip_header -%>
+  real_ip_header          <%= @real_ip_header %>;
+<% end -%>
 <% if @proxy_redirect -%>
   proxy_redirect          <%= @proxy_redirect %>;
 <% end -%>

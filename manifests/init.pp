@@ -115,6 +115,7 @@ class nginx (
   $proxy_set_header               = [],
   $proxy_hide_header              = [],
   $proxy_pass_header              = [],
+  $real_ip_header                 = undef,
   $sendfile                       = 'on',
   $server_tokens                  = 'off',
   $spdy                           = 'off',

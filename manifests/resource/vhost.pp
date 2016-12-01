@@ -254,7 +254,7 @@ define nginx::resource::vhost (
   $proxy_set_body               = undef,
   $proxy_buffering              = undef,
   $resolver                     = [],
-  $resolver_timeout             = '5s',
+  $resolver_timeout             = undef,
   $fastcgi                      = undef,
   $fastcgi_param                = undef,
   $fastcgi_params               = "${::nginx::conf_dir}/fastcgi_params",
