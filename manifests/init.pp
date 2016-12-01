@@ -174,6 +174,9 @@ class nginx (
   validate_array($proxy_set_header)
   validate_array($proxy_hide_header)
   validate_array($proxy_pass_header)
+  if ($real_ip_header != undef) {
+    validate_string($real_ip_header)
+  }
   if ($proxy_http_version != undef) {
     validate_string($proxy_http_version)
   }

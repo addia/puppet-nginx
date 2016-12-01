@@ -260,7 +260,7 @@ define nginx::resource::location (
     validate_array($proxy_pass_header)
   }
   if ($real_ip_header != undef) {
-    validate_array($real_ip_header)
+    validate_string($real_ip_header)
   }
   if ($fastcgi != undef) {
     validate_string($fastcgi)
