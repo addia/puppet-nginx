@@ -20,9 +20,10 @@
 #     listing. Undef by default.
 #   [*index_files*]          - Default index files for NGINX to read when
 #     traversing a directory
-#   [*proxy*]                - Proxy server(s) for a location to connect to.
+#   [*proxy*]                - this enables the proxy setting in location.
 #     Accepts a single value, can be used in conjunction with
 #     nginx::resource::upstream
+#   [*proxy_pass*]           - Proxy server(s) for a location to connect to.
 #   [*proxy_redirect*]       - sets the text, which must be changed in
 #     response-header "Location" and "Refresh" in the response of the proxied
 #     server.
@@ -163,6 +164,7 @@ define nginx::resource::location (
     'index.htm',
     'index.php'],
   $proxy                = undef,
+  $proxy_pass           = $::nginx::proxy_pass,
   $proxy_redirect       = $::nginx::proxy_redirect,
   $proxy_read_timeout   = $::nginx::proxy_read_timeout,
   $proxy_connect_timeout = $::nginx::proxy_connect_timeout,
@@ -240,6 +242,9 @@ define nginx::resource::location (
   }
   if ($proxy != undef) {
     validate_string($proxy)
+  }
+  if ($proxy_pass != undef) {
+    validate_string($proxy_pass)
   }
   if ($proxy_redirect != undef) {
     validate_string($proxy_redirect)

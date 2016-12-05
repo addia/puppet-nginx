@@ -36,9 +36,10 @@
 #     traversing a directory
 #   [*autoindex*]           - Set it on 'on' or 'off 'to activate/deactivate
 #                             autoindex directory listing. Undef by default.
-#   [*proxy*]               - Proxy server(s) for the root location to connect
+#   [*proxy*]               - set the location proxy config
 #     to.  Accepts a single value, can be used in conjunction with
 #     nginx::resource::upstream
+#   [*proxy*]               - Proxy server(s) for the root location to connect
 #   [*proxy_read_timeout*]  - Override the default the proxy read timeout value
 #     of 90 seconds
 #   [*proxy_redirect*]      - Override the default proxy_redirect value of off.
@@ -239,6 +240,7 @@ define nginx::resource::vhost (
   $spdy                         = $::nginx::spdy,
   $http2                        = $::nginx::http2,
   $proxy                        = undef,
+  $proxy_pass                   = $::nginx::proxy_pass,
   $proxy_redirect               = undef,
   $proxy_read_timeout           = $::nginx::proxy_read_timeout,
   $proxy_connect_timeout        = $::nginx::proxy_connect_timeout,
@@ -404,6 +406,9 @@ define nginx::resource::vhost (
   validate_string($spdy)
   if ($proxy != undef) {
     validate_string($proxy)
+  }
+  if ($proxy_pass != undef) {
+    validate_string($proxy_pass)
   }
   if ($proxy_read_timeout != undef) {
     validate_string($proxy_read_timeout)
@@ -657,6 +662,7 @@ define nginx::resource::vhost (
       location_allow              => $location_allow,
       location_deny               => $location_deny,
       proxy                       => $proxy,
+      proxy_pass                  => $proxy_pass,
       proxy_redirect              => $proxy_redirect,
       proxy_read_timeout          => $proxy_read_timeout,
       proxy_connect_timeout       => $proxy_connect_timeout,
