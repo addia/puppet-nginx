@@ -106,7 +106,7 @@ class nginx (
   $proxy_cache_max_size           = undef,
   $proxy_cache_path               = false,
   $proxy_use_temp_path            = false,
-  $proxy_connect_timeout          = undef,
+  $proxy_connect_timeout          = '60',
   $proxy_headers_hash_bucket_size = undef,
   $proxy_http_version             = undef,
   $proxy_read_timeout             = undef,
