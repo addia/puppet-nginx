@@ -72,7 +72,6 @@ http {
   log_format <%= key %> '<%= value %>';
 <% end -%>
 <% end -%>
-
 <% if @http_access_log.is_a?(Array) -%>
   <%- @http_access_log.each do |log_item| -%>
   access_log  <%= log_item %><% if @http_format_log %> <%= @http_format_log%><% end %>;
@@ -80,11 +79,11 @@ http {
 <% else -%>
   access_log  <%= @http_access_log %><% if @http_format_log %> <%= @http_format_log%><% end %>;
 <% end -%>
+
   types_hash_max_size <%= @types_hash_max_size %>;
 <% if @types_hash_bucket_size -%>
   types_hash_bucket_size <%= @types_hash_bucket_size %>;
 <% end -%>
-
   server_names_hash_bucket_size <%= @names_hash_bucket_size %>;
   server_names_hash_max_size <%= @names_hash_max_size %>;
 
@@ -170,10 +169,10 @@ http {
   proxy_set_header        <%= header %>;
 <% end -%>
 <% @proxy_hide_header.each do |header| -%>
-  proxy_hide_header        <%= header %>;
+  proxy_hide_header       <%= header %>;
 <% end -%>
 <% @proxy_pass_header.each do |header| -%>
-  proxy_pass_header        <%= header %>;
+  proxy_pass_header       <%= header %>;
 <% end -%>
 <% if @proxy_headers_hash_bucket_size -%>
   proxy_headers_hash_bucket_size <%= @proxy_headers_hash_bucket_size %>;
