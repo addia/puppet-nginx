@@ -74,7 +74,7 @@ class nginx (
   $fastcgi_cache_max_size         = '500m',
   $fastcgi_cache_path             = false,
   $fastcgi_cache_use_stale        = false,
-  $gzip                           = 'on',
+  $gzip                           = 'off',
   $gzip_buffers                   = undef,
   $gzip_comp_level                = 6,
   $gzip_disable                   = 'msie6',

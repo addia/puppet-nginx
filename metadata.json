@@ -1,12 +1,12 @@
 {
   "name": "puppet-nginx",
-  "version": "0.5.1-rc0",
-  "author": "Vox Pupuli",
+  "version": "0.8.99",
+  "author": "Addi Abel (after cloned from Fryman and Vox Pupuli)",
   "summary": "Puppet NGINX management module",
   "license": "MIT",
-  "source": "https://github.com/voxpupuli/puppet-nginx.git",
-  "project_page": "http://github.com/voxpupuli/puppet-nginx",
-  "issues_url": "https://github.com/voxpupuli/puppet-nginx/issues",
+  "source": "https://github.com/addia/puppet-nginx.git",
+  "project_page": "http://github.com/addia/puppet-nginx",
+  "issues_url": "https://github.com/addia/puppet-nginx/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
