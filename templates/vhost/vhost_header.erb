@@ -189,5 +189,7 @@ server {
   error_page  <%= key %> <%= @error_pages[key] %>;
   <%- end -%>
 <% end -%>
+<% if @index_files.count > 0 -%>
   index                    <% Array(@index_files).each do |i| %> <%= i %><% end %>;
+<% end -%>
 <% end -%>

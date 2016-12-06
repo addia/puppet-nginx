@@ -264,10 +264,7 @@ define nginx::resource::vhost (
   $uwsgi                        = undef,
   $uwsgi_params                 = "${nginx::config::conf_dir}/uwsgi_params",
   $uwsgi_read_timeout           = undef,
-  $index_files                  = [
-    'index.html',
-    'index.htm',
-    'index.php'],
+  $index_files                  = ['index.html','index.htm','index.php'],
   $autoindex                    = undef,
   $server_name                  = [$name],
   $www_root                     = undef,
@@ -472,7 +469,9 @@ define nginx::resource::vhost (
   if ($uwsgi_read_timeout != undef) {
     validate_string($uwsgi_read_timeout)
   }
-  validate_array($index_files)
+  if ($index_files != undef) {
+    validate_array($index_files)
+  }
   if ($autoindex != undef) {
     validate_string($autoindex)
   }
